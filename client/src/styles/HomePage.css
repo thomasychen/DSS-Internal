@@ -1,0 +1,45 @@
+.pageWrapper {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .leftColumn {
+    flex: 1;
+    background-color: #ffffff; /* White background for the left column */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .rightColumn {
+    flex: 1;
+    background-color: #eeeeee; /* Grey background for the right column */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .welcomeText {
+    color: #004d40; /* Adjust the color if needed */
+    font-size: 24px; /* Adjust font size as needed */
+    text-align: center;
+    margin-bottom: 20px; /* Space between text and button */
+  }
+  
+  .googleSignInButton {
+    background-color: #4285f4; /* Google's brand color */
+    color: white;
+    text-transform: none; /* Prevent uppercase transformation */
+    padding: 10px 24px; /* Adjust padding to match the design */
+    border-radius: 4px; /* Rounded corners */
+    box-shadow: none; /* Remove MUI default shadow */
+    font-weight: bold; /* Google button is usually bold */
+    font-size: 16px; /* Match the design size */
+  }
+  
+  /* Hover state styling for the button */
+  .googleSignInButton:hover {
+    background-color: #3367d6; /* Slightly darker blue on hover */
+    box-shadow: none; /* Remove MUI default shadow on hover */
+  }
