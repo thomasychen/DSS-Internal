@@ -2,7 +2,9 @@
 Internal Website for DSSers
 
 How to run locally:
+
 Using 2 separate terminal instances 
+
 Frontend: 
 1. cd to client/ folder
 2. make sure you have node installed (brew install node for mac)
