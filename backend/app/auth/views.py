@@ -6,6 +6,11 @@ import jwt
 
 mod = Blueprint('auth', __name__, url_prefix='/auth')
 
+@mod.route('/logout', methods=['POST'])
+def logout():
+    resp = make_response(jsonify({"message": "Logged out successfully"}))
+    resp.set_cookie('auth_token', '', expires=0)  # Clear the cookie
+    return resp
 
 @mod.route('/session-status', methods=['GET'])
 def check_session_status():
@@ -32,12 +37,12 @@ def verify_google_token():
         email_valid = check_email_in_list(user_email)
         if email_valid:
             custom_token = generate_jwt(user_email)
-            resp = make_response(jsonify(success=True, emailValid=True))
+            resp = make_response(jsonify(success=True, emailValid=True, userEmail=user_email))
             resp.set_cookie('auth_token', custom_token, httponly=True, secure=True, path='/') # secure=True ensures it's sent over HTTPS only
         else:
-            resp = make_response(jsonify(success=True, emailValid=False))
+            resp = make_response(jsonify(success=True, emailValid=False, userEmail=user_email))
         return resp 
-    return jsonify(success=False, emailValid=False)
+    return jsonify(success=False, emailValid=False, userEmail="")
 
 def check_email_in_list(email):
     # Implement your logic to check against the CSV/mailing list
