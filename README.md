@@ -11,10 +11,11 @@ Frontend terminal:
 
 Backend terminal:
 1. cd out of the repo one level by doing cd ..
-2. make a python venv by doing python -m venv dss-internal
+2. make a python venv by doing python -m venv dss-internal-env
 3. cd back into the repo
-4. cd to backend
-5. run pip install -r requirements.txt
+4. run source dss-internal-env/bin/activate (replace bin with scripts if on windows)
+5. cd to backend
+6. run pip install -r requirements.txt
 
 
 At this point your environment is set up, but if you run npm start in your frontend terminal and python run.py in your backend terminal, the website will run but logging in will not work. please contact me on slack or messenger to get the required environment secrets to finish setup.
