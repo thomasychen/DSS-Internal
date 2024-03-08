@@ -1,3 +1,4 @@
+// App.js
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -5,7 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import HomeDirectory from "./pages/HomeDirectory";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from './components/PublicRoute';
-import AuthProvider from './context/AuthContext'; // Import the AuthProvider
+import AuthProvider from './context/AuthContext';
 
 export default function App() {
   return (
