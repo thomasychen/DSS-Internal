@@ -3,23 +3,16 @@ import { React } from 'react';
 import '../styles/LoginPage.css';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom'; 
-import axios from 'axios';
 import dssLogo from '../assets/dss_logo.png';
+import { useAuth } from '../context/AuthContext';
 
 function LoginPage() {
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const responseGoogle = (response) => {
-    // Send token to the backend
-    axios.post('auth/verify-google-token', {
-      token: response.credential
-    })
-    .then(response => {
-      const data = response.data;
-      // If login is successful and email is valid, redirect to HomeDirectory
-      if (data.success && data.emailValid) {
-        navigate("/")
-      }
+    login(response.credential).then(() => {
+      navigate("/");
     })
     .catch(error => {
       console.error("Error:", error);
