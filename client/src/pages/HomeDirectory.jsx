@@ -7,38 +7,19 @@ import Typography from '@mui/material/Typography';
 import { AppBar, Toolbar, IconButton, Button } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout'; // assuming you want a logout icon
 import {Link} from "react-router-dom";
+import axios from 'axios';
 // import DSSLogo from './assets/dss-logo.svg'; // assuming you have a logo image
 
 export default function HomeDirectory() {
   const { isLoggedIn, isLoading, logout, profile } = useAuth();
   const [people, setPeople] = useState([]);
-  const exampleResponseData = [
-    {
-      photo: "https://example.com/path/to/photo1.jpg",
-      name: "Preetha Kumar",
-      currentPosition: "President",
-      email: "preetha.kumar@example.edu"
-    },
-    {
-      photo: "https://example.com/path/to/photo2.jpg",
-      name: "Thomas Chen",
-      currentPosition: "Internal VP",
-      email: "thomas.chen@example.edu"
-    },
-    {
-      photo: "https://example.com/path/to/photo3.jpg",
-      name: "James Geronimo",
-      currentPosition: "Director of AcadDev",
-      email: "james.geronimo@example.edu"
-    },
-    // ... more person objects
-  ];
+ 
 
   useEffect(() => {
     const fetchPeople = async () => {
       try {
-        // const response = await axios.get('api/all-cards');
-        setPeople(exampleResponseData); // assuming the API returns an array of people
+        const response = await axios.get('api/get-data');
+        setPeople(response.data); // assuming the API returns an array of people
       } catch (error) {
         console.error('Error fetching data: ', error);
       }
@@ -71,11 +52,11 @@ export default function HomeDirectory() {
       {/* <button onClick={logout}>Logout</button> */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
         {people.map(person => (
-          <Card key={person.email} style={{ width: 345, margin: '16px' }}>
+          <Card key={person.name} style={{ width: 345, margin: '16px' }}>
             <CardMedia
               component="img"
               height="140"
-              image={person.photo}
+              image={person.image}
               alt={person.name}
             />
             <CardContent>
@@ -83,11 +64,11 @@ export default function HomeDirectory() {
                 {person.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {person.currentPosition}
+                {person.position}
               </Typography>
-              <Typography variant="body2" color="text.primary">
-                {person.email}
-              </Typography>
+              {/* <Typography variant="body2" color="text.primary">
+                {person.name}
+              </Typography> */}
             </CardContent>
           </Card>
         ))}
