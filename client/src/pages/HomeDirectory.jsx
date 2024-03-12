@@ -55,7 +55,7 @@ export default function HomeDirectory() {
           <Card key={person.name} style={{ width: 345, margin: '16px' }}>
             <CardMedia
               component="img"
-              height="140"
+              height="320"
               image={person.image}
               alt={person.name}
             />

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 
 def create_app():
-    app = Flask(_name_)
+    app = Flask(__name__)
 
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 

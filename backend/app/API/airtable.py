@@ -2,7 +2,7 @@ from flask import Flask, jsonify, Blueprint
 from pyairtable import Api, Base
 import os
 
-mod = Blueprint('api', _name_, url_prefix='/api')
+mod = Blueprint('api', __name__, url_prefix='/api')
 
 BASE_ID = 'appkzoV3T5OcsljQl'
 TABLE_NAME = 'tbl4TdhgfK0Qt5k6f'
@@ -17,9 +17,9 @@ def fetch_data():
     people = []
     for record in records:
         person = {
-            'Name': record['fields'].get('Name', ''),
-            'Position': record['fields'].get('Positions Held', ["No positions"])[0],
-            'Image': record['fields'].get('Images', [{"url":"no image"}])[0]["url"]
+            'name': record['fields'].get('Name', ''),
+            'position': record['fields'].get('Positions Held', ["No positions"])[0],
+            'image': record['fields'].get('Images', [{"url":"no image"}])[0]["url"]
         }
         people.append(person)
     return people
