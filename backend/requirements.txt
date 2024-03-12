@@ -3,3 +3,4 @@ requests
 flask_cors
 pyjwt
 python-dotenv
+pyairtable
