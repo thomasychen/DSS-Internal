@@ -18,7 +18,7 @@ def fetch_data():
     for record in records:
         person = {
             'name': record['fields'].get('Name', ''),
-            'position': record['fields'].get('Positions Held', ["No positions"])[0],
+            'position': record['fields'].get('Current Position', ["No positions"]),
             'image': record['fields'].get('Images', [{"url":"no image"}])[0]["url"]
         }
         people.append(person)
