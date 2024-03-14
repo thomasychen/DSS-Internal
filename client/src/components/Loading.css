@@ -1,0 +1,22 @@
+.logo-loading-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  /* Styles for teal highlight paths */
+  .teal-path-animation {
+    stroke-dasharray: 100; /* Adjust as needed for the length of the teal paths */
+    stroke-dashoffset: 100; /* Adjust as needed for the length of the teal paths */
+    animation: highlight-animation 1s infinite linear;
+  }
+  
+  @keyframes highlight-animation {
+    0% {
+      stroke-dashoffset: 100;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }

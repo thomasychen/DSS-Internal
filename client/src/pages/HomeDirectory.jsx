@@ -8,19 +8,25 @@ import { AppBar, Toolbar, IconButton, Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout"; // assuming you want a logout icon
 import { Link } from "react-router-dom";
 import axios from "axios";
-import DSSLogo from "../assets/dsslogo.png"; // Corrected image import path
+import DSSLogo from "../assets/dsslogo.png"; 
+import LogoLoading from "../components/Loading";
 
 export default function HomeDirectory() {
   const { isLoggedIn, isLoading, logout, profile } = useAuth();
   const [people, setPeople] = useState([]);
 
+  const [isFetching, setIsFetching] = useState(false); // New state for tracking fetching status
+
   useEffect(() => {
     const fetchPeople = async () => {
+      setIsFetching(true); // Start fetching
       try {
         const response = await axios.get("api/get-data");
-        setPeople(response.data); // assuming the API returns an array of people
+        setPeople(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);
+      } finally {
+        setIsFetching(false); // Done fetching
       }
     };
 
@@ -29,8 +35,8 @@ export default function HomeDirectory() {
     }
   }, [isLoggedIn]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
+  if (isLoading || isFetching) { // Show loading if either auth or people data is being loaded
+    return <LogoLoading/>;
   }
 
   return (
