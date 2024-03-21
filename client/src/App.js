@@ -31,14 +31,13 @@ export default function App() {
               }
             />
             <Route
-              path="/personal/:id" // Update path to include ':id' parameter
+              path="/personal/:id"
               element={
                 <ProtectedRoute>
                   <PersonalPage />
                 </ProtectedRoute>
               }
-            />{" "}
-            {/* Add route for personal pages */}
+            />
           </Routes>
         </Router>
       </AuthProvider>

@@ -20,7 +20,7 @@ export default function HomeDirectory() {
     const fetchPeople = async () => {
       setIsFetching(true);
       try {
-        const response = await axios.get("api/get-data");
+        const response = await axios.get("/api/get-data");
         setPeople(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -45,6 +45,7 @@ export default function HomeDirectory() {
           <IconButton edge="start" color="inherit" aria-label="logo">
             <img src={DSSLogo} alt="DSS Logo" height="50" />
           </IconButton>
+          <div style={{ flexGrow: 1 }}></div>
           <Button color="inherit" onClick={logout}>
             Logout <LogoutIcon />
           </Button>
@@ -65,7 +66,7 @@ export default function HomeDirectory() {
             key={person.id} // Assuming 'id' is the field name for record ID
             to={{
               pathname: `/personal/${person.id}`, // Pass record ID as part of the URL
-              state: { personData: person },
+              state: { personData: person }, // Pass person data as part of the state
             }}
             style={{ textDecoration: "none", color: "inherit" }}
           >

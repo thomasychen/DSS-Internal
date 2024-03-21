@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 export default function PersonalPage() {
-  const { id } = useParams(); // Retrieve record ID from route parameters
+  const { id } = useParams();
   const [person, setPerson] = useState(null);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function PersonalPage() {
   }, [id]);
 
   if (!person) {
-    return <div>Loading...</div>; // Add loading indicator
+    return <div>Loading...</div>;
   }
 
   return (
@@ -81,10 +81,10 @@ export default function PersonalPage() {
           style={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start", // Adjusted to align to the left
+            alignItems: "flex-start",
             position: "absolute",
-            top: "212px", // Aligns with the main picture
-            left: "982px", // Adjusted to position to the right of the main picture
+            top: "212px",
+            left: "982px",
           }}
         >
           <h2>{person.name}</h2>
@@ -99,18 +99,18 @@ export default function PersonalPage() {
             flexDirection: "column",
             alignItems: "flex-end",
             position: "absolute",
-            top: "545px", // Adjust the top position according to your layout
-            left: "712px", // Keep it aligned with the main picture
+            top: "545px",
+            left: "712px",
           }}
         >
-          {[...Array(3)].map((_, index) => (
+          {person.closest_friends.map((friend, index) => (
             <div
               key={index}
               style={{
                 backgroundColor: "#f0f0f0",
                 borderRadius: "10px",
                 padding: "10px",
-                width: "325px", // Adjust width as needed
+                width: "325px",
                 marginBottom: "20px",
               }}
             >
@@ -131,8 +131,8 @@ export default function PersonalPage() {
                   }}
                 >
                   <img
-                    src={person.image} // Assuming you're using the same image for all
-                    alt={person.name}
+                    src={friend.image}
+                    alt={friend.name}
                     style={{
                       width: "100%",
                       height: "100%",
@@ -141,11 +141,11 @@ export default function PersonalPage() {
                   />
                 </div>
                 <div>
-                  <h3>{person.name}</h3>
-                  <p>{person.email}</p>
+                  <h3>{friend.name}</h3>
+                  <p>{friend.email}</p>
                 </div>
               </div>
-              <p>{person.position}</p>
+              <p>{friend.position}</p>
             </div>
           ))}
         </div>
