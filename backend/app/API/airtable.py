@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, Blueprint
+from flask import Flask, jsonify, Blueprint, request
 from pyairtable import Api, Base
 import os
 
@@ -17,6 +17,7 @@ def fetch_data():
     people = []
     for record in records:
         person = {
+            'id': record['id'],  # Include unique ID for each person
             'name': record['fields'].get('Name', ''),
             'position': record['fields'].get('Current Position', ["No positions"]),
             'image': record['fields'].get('Images', [{"url":"no image"}])[0]["url"],
@@ -25,7 +26,18 @@ def fetch_data():
         people.append(person)
     return people
 
-@mod.route('get-data', methods=['GET'])
+@mod.route('/get-personal-data', methods=['GET'])
+def get_personal_data():
+    person_id = request.args.get('person_id')  # Get person ID from query string
+    
+    # Find the person in the data by ID
+    for person in fetch_data():
+        if person['id'] == person_id:
+            return jsonify(person)
+    
+    return jsonify({'error': 'Person not found'})
+
+@mod.route('/get-data', methods=['GET'])
 def get_data():
     people = fetch_data()
     return jsonify(people)

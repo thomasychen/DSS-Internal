@@ -5,28 +5,27 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import { AppBar, Toolbar, IconButton, Button } from "@mui/material";
-import LogoutIcon from "@mui/icons-material/Logout"; // assuming you want a logout icon
+import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import DSSLogo from "../assets/dsslogo.png"; 
+import DSSLogo from "../assets/dsslogo.png";
 import LogoLoading from "../components/Loading";
 
 export default function HomeDirectory() {
-  const { isLoggedIn, isLoading, logout, profile } = useAuth();
+  const { isLoggedIn, isLoading, logout } = useAuth();
   const [people, setPeople] = useState([]);
-
-  const [isFetching, setIsFetching] = useState(false); // New state for tracking fetching status
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     const fetchPeople = async () => {
-      setIsFetching(true); // Start fetching
+      setIsFetching(true);
       try {
         const response = await axios.get("api/get-data");
         setPeople(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);
       } finally {
-        setIsFetching(false); // Done fetching
+        setIsFetching(false);
       }
     };
 
@@ -35,56 +34,80 @@ export default function HomeDirectory() {
     }
   }, [isLoggedIn]);
 
-  if (isLoading || isFetching) { // Show loading if either auth or people data is being loaded
-    return <LogoLoading/>;
+  if (isLoading || isFetching) {
+    return <LogoLoading />;
   }
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
-      }}
-    >
-      <AppBar position="static" style={{ backgroundColor: '#8CD6D1' }}>
+    <div>
+      <AppBar position="static" style={{ backgroundColor: "#8CD6D1" }}>
         <Toolbar>
-          <Link to="/" style={{ flexGrow: 1 }}>
-            <IconButton edge="start" color="inherit" aria-label="logo">
-              <img src={DSSLogo} alt="DSS Logo" height="50" />
-            </IconButton>
-          </Link>
+          <IconButton edge="start" color="inherit" aria-label="logo">
+            <img src={DSSLogo} alt="DSS Logo" height="50" />
+          </IconButton>
           <Button color="inherit" onClick={logout}>
             Logout <LogoutIcon />
           </Button>
         </Toolbar>
       </AppBar>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "16px", justifyContent: 'center', alignItems: 'flex-start', margin: '0 auto'}}>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "16px",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          margin: "0 auto",
+        }}
+      >
         {people.map((person) => (
-          <Card
-            key={person.name}
-            style={{ width: 345, margin: "16px", borderRadius: "20px", backgroundColor: '#FAFAF5'}}
+          <Link
+            key={person.id} // Assuming 'id' is the field name for record ID
+            to={{
+              pathname: `/personal/${person.id}`, // Pass record ID as part of the URL
+              state: { personData: person },
+            }}
+            style={{ textDecoration: "none", color: "inherit" }}
           >
-            <CardMedia
-              component="img"
-              height="320"
-              image={person.image}
-              alt={person.name}
-            />
-            <CardContent style = {{padding: '16px'}}>
-              <Typography gutterBottom variant="h5" component="div" style = {{fontWeight: 'bold', marginBottom: '0.35emm'}}>
-                {person.name}
-              </Typography>
-              <Typography variant="h5" style={{ color: '#4B48C6', fontWeight: 'bold', marginBottom: '0.75em'}}>
-              {person.position}
-              </Typography>
-              <Typography variant="body2" color="text.primary">
-                {person.email}
-              </Typography>
-            </CardContent>
-          </Card>
+            <Card
+              style={{
+                width: 345,
+                margin: "16px",
+                borderRadius: "20px",
+                backgroundColor: "#FAFAF5",
+              }}
+            >
+              <CardMedia
+                component="img"
+                height="320"
+                image={person.image}
+                alt={person.name}
+              />
+              <CardContent style={{ padding: "16px" }}>
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  style={{ fontWeight: "bold", marginBottom: "0.35em" }}
+                >
+                  {person.name}
+                </Typography>
+                <Typography
+                  variant="h5"
+                  style={{
+                    color: "#4B48C6",
+                    fontWeight: "bold",
+                    marginBottom: "0.75em",
+                  }}
+                >
+                  {person.position}
+                </Typography>
+                <Typography variant="body2" color="text.primary">
+                  {person.email}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>
