@@ -5,10 +5,10 @@
     height: 100vh;
   }
   
-  /* Styles for teal highlight paths */
-  .teal-path-animation {
-    stroke-dasharray: 100; /* Adjust as needed for the length of the teal paths */
-    stroke-dashoffset: 100; /* Adjust as needed for the length of the teal paths */
+  /* Highlight animation for the teal paths */
+  .path-animation {
+    stroke-dasharray: 100; /* Adjust based on the actual length of the path */
+    stroke-dashoffset: 100; /* Adjust based on the actual length of the path */
     animation: highlight-animation 1s infinite linear;
   }
   
