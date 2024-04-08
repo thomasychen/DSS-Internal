@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, Blueprint, request
 from pyairtable import Api, Base
+from pyairtable.formulas import match
 import os
 
 mod = Blueprint('api', __name__, url_prefix='/api')
@@ -43,29 +44,45 @@ def fetch_person_with_friends_by_id(person_id):
         current_position = record['fields'].get('Current Position', 'No current position listed')
 
         # Get the first three people's IDs from the Airtable
-        people_records = table.all(view='Grid view', max_records=3)  # Adjust view name if needed
-        friend_ids = [person['id'] for person in people_records]
+        # I don't need below lines if im getting top 3 friends
+        #people_records = table.all(view='Grid view', max_records=3)  # Adjust view name if needed
+        #friend_ids = [person['id'] for person in people_records]
+
+        # Extract the IDs of the top 3 friends
+        friend_names = [record['fields'].get(f'friend_{i}') for i in range(1, 4)]
 
         # Initialize placeholders for the closest friends
         closest_friends = []
 
         # Fetch each friend's details from their IDs and append to closest_friends list
-        for friend_id in friend_ids:
-            if friend_id != person_id:  # Exclude the person's own ID
+        for friend_name in friend_names:
+            if friend_name:  # Exclude the person's own ID
                 try:
-                    friend_record = table.get(friend_id)
+                    formula = match({"Name": friend_name})
+                    matching_record = table.first(formula=formula)
+                    if matching_record:
+                        friend_record = matching_record
+                        friend_details = {
+                            'id': friend_record['id'],
+                            'name': friend_record['fields'].get('Name', 'Unknown'),
+                            'image': friend_record['fields'].get('Images', [{"url": "no image"}])[0]["url"],
+                            'position': friend_record['fields'].get('Current Position', 'No position listed'),
+                            'email': friend_record['fields'].get('Email', 'No email listed')
+                        }
+                        closest_friends.append(friend_details)
+                        logger.info(f"Fetched friend: {friend_details}")
+                    else:
+                        raise Exception(f"{friend_name} not found in database")
+                except Exception as e:
+                    logger.error(f"Error fetching friend details for ID {friend_name}: {e}")
                     friend_details = {
-                        'id': friend_record['id'],
-                        'name': friend_record['fields'].get('Name', 'Unknown'),
-                        'image': friend_record['fields'].get('Images', [{"url": "no image"}])[0]["url"],
-                        # Fetch additional info for each friend
-                        'position': friend_record['fields'].get('Current Position', 'No position listed'),
-                        'email': friend_record['fields'].get('Email', 'No email listed')
+                            'id': "",
+                            'name': str(e),
+                            'image': "",
+                            'position': "",
+                            'email': ""
                     }
                     closest_friends.append(friend_details)
-                    logger.info(f"Fetched friend: {friend_details}")
-                except Exception as e:
-                    logger.error(f"Error fetching friend details for ID {friend_id}: {e}")
                     # Log error or assign placeholder if needed
 
         # Construct the person details including the closest friends separately and person's own details
