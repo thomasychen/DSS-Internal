@@ -4,12 +4,13 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { AppBar, Toolbar, IconButton, Button } from "@mui/material";
-import LogoutIcon from "@mui/icons-material/Logout";
+// import { AppBar, Toolbar, IconButton, Button } from "@mui/material";
+// import LogoutIcon from "@mui/icons-material/Logout";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import DSSLogo from "../assets/dsslogo.png";
+// import DSSLogo from "../assets/dsslogo.png";
 import LogoLoading from "../components/Loading";
+import NavBar from "../components/NavBar";
 
 export default function HomeDirectory() {
   const { isLoggedIn, isLoading, logout } = useAuth();
@@ -40,7 +41,7 @@ export default function HomeDirectory() {
 
   return (
     <div>
-      <AppBar position="static" style={{ backgroundColor: "#8CD6D1" }}>
+      {/* <AppBar position="static" style={{ backgroundColor: "#8CD6D1" }}>
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="logo">
             <img src={DSSLogo} alt="DSS Logo" height="50" />
@@ -50,7 +51,8 @@ export default function HomeDirectory() {
             Logout <LogoutIcon />
           </Button>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
+      <NavBar logout={logout}/>
       <div
         style={{
           display: "flex",

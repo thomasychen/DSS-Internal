@@ -1,14 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import React, { useState, useEffect } from 'react';
 import { Card, CardMedia, CardContent, Typography, TextField, Button } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import styled from '@emotion/styled';
+import LogoLoading from "../components/Loading";
+import { useAuth } from "../context/AuthContext";
+import NavBar from "../components/NavBar";
 
 // Styled components using Emotion
 const Container = styled.div`
   display: flex;
-  height: 100vh;
+  height: 90vh;
 `;
 
 const ChatColumn = styled.div`
@@ -93,6 +97,7 @@ const Position = styled(Typography)`
 export default function PersonalPage() {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
+  const {logout} = useAuth();
 
   const sendMessage = () => {
     if (messageInput.trim()) {
@@ -120,16 +125,18 @@ export default function PersonalPage() {
   }, [id]);
 
   if (!person) {
-    return <div>Loading...</div>;
+    return <LogoLoading/>;
   }
 
   return (
+    <>
+    <NavBar logout={logout}/>
     <Container>
       <ChatColumn>
         <ChatBox>
           {/* Initial greeting text */}
           <Typography variant="h5">DSS-GPT</Typography>
-          <Typography variant="body1">Hello! Welcome to {person.name}'s page. Feel free to ask me any questions you have about him.</Typography>
+          <Typography variant="body1">Hello! Welcome to {person.name}'s page. Feel free to ask me any questions you have about them.</Typography>
           {/* Display messages here */}
           {messages.map((msg, index) => (
             <Typography key={index}>{msg}</Typography>
@@ -194,5 +201,6 @@ export default function PersonalPage() {
         ))}
       </ProfileColumn>
     </Container>
+    </>
   );
 }
