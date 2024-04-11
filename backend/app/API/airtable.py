@@ -2,12 +2,20 @@ from flask import Flask, jsonify, Blueprint, request
 from pyairtable import Api, Base
 from pyairtable.formulas import match
 import os
+from openai import OpenAI
+import fitz
+import requests
+
+
 
 mod = Blueprint('api', __name__, url_prefix='/api')
 
 BASE_ID = 'appkzoV3T5OcsljQl'
 TABLE_NAME = 'tbl4TdhgfK0Qt5k6f'
 ACCESS_TOKEN = os.environ.get('AIRTABLE_TOKEN')
+OPENAI_KEY = os.environ.get("OPENAI_KEY")
+
+client = OpenAI(api_key=OPENAI_KEY)
 
 api = Api(ACCESS_TOKEN)
 base = Base(api, BASE_ID)
@@ -105,12 +113,12 @@ def fetch_person_with_friends_by_id(person_id):
 @mod.route('/get-personal-data', methods=['GET'])
 def get_personal_data():
     person_id = request.args.get('person_id')  # Get person ID from query string
-    
+
     # Find the person in the data by ID
     for person in fetch_data():
         if person['id'] == person_id:
             return jsonify(person)
-    
+
     return jsonify({'error': 'Person not found'})
 
 @mod.route('/get-data', methods=['GET'])
@@ -125,3 +133,59 @@ def get_personal_data_with_friends():
     if person:
         return jsonify(person)
     return jsonify({'error': 'Person not found'})
+
+#get name and prompt
+# find the row in the airtable of that person and load that row
+@mod.route('/get-chat-response', methods=['GET'])
+def get_chat_response():
+
+
+    person_id = request.args.get('person_id')
+    chat_input = request.args.get('chat_input')
+
+
+    person_data = table.get(person_id)
+    linkedin_pdf = person_data['fields'].get('Linkedin')
+    if linkedin_pdf and len(linkedin_pdf) > 0:
+        pdf_url = linkedin_pdf[0]['url'] 
+    else:
+        pdf_url = None
+    
+    linkedin_text = ""
+
+    if pdf_url:
+        response = requests.get(pdf_url)
+        response.raise_for_status()  # Ensure we got a successful response
+        # Load PDF from bytes
+        doc = fitz.open(stream=response.content, filetype="pdf")
+
+        # Extract text
+        for page in doc:
+            linkedin_text += page.get_text()
+
+        # Close the document
+        doc.close()
+
+
+    response = client.chat.completions.create(model="gpt-4",  # or another model version
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": str(person_data)},
+        {"role": "user", "content": chat_input},
+        {"role": "user", "content": linkedin_text}
+    ])
+
+    try:
+        last_message_content = response['choices'][0]['message']['content']
+    except (KeyError, IndexError):
+        last_message_content = "Error processing completion."
+
+    # Return this as a JSON response
+    return jsonify({"response": last_message_content})
+    
+        # if person:
+        #     return jsonify(person)
+        # return jsonify({'error': 'Person not found'})
+
+# if __name__ == '__main__':
+#     get_chat_response()
