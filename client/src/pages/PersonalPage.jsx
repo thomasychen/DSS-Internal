@@ -30,10 +30,15 @@ const MessageAvatar = styled(Avatar)`
   margin: 0 8px;
 `;
 
-// Styled components using Emotion
+
 const Container = styled.div`
   display: flex;
   height: 90vh;
+  flex-direction: row; // Default to row for larger screens
+
+  @media (max-width: 768px) {
+    flex-direction: column; // Stack vertically on small screens
+  }
 `;
 
 const ChatColumn = styled.div`
@@ -42,7 +47,39 @@ const ChatColumn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-basis: 100%; // Take full width on small screens
+  }
 `;
+
+const ProfileColumn = styled.div`
+  flex-basis: 60%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+
+  @media (max-width: 768px) {
+    flex-basis: 100%; // Take full width on small screens
+    order: -1; // Make it appear above the chat column
+  }
+`;
+
+
+// // Styled components using Emotion
+// const Container = styled.div`
+//   display: flex;
+//   height: 90vh;
+// `;
+
+// const ChatColumn = styled.div`
+//   flex-basis: 40%;
+//   background-color: #FAFAF5;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: space-between;
+// `;
 
 const ChatBox = styled.div`
   flex-grow: 1;
@@ -59,13 +96,13 @@ const InputArea = styled.div`
   padding: 20px;
 `;
 
-const ProfileColumn = styled.div`
-  flex-basis: 60%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-`;
+// const ProfileColumn = styled.div`
+//   flex-basis: 60%;
+//   padding: 20px;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: left;
+// `;
 
 const LargeCard = styled(Card)`
   width: 100%;

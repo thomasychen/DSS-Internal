@@ -1,7 +1,8 @@
 .pageWrapper {
-    display: flex;
-    height: 100vh;
-  }
+  display: flex;
+  flex-direction: column; /* Stack columns vertically on smaller screens */
+  height: 100vh;
+}
   
   .leftColumn {
     flex: 1;
@@ -43,3 +44,10 @@
     background-color: #3367d6; /* Slightly darker blue on hover */
     box-shadow: none; /* Remove MUI default shadow on hover */
   }
+
+
+@media (min-width: 600px) {
+  .pageWrapper {
+    flex-direction: row; /* Return to horizontal layout on wider screens */
+  }
+}

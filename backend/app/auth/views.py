@@ -4,6 +4,22 @@ import requests
 import datetime
 import jwt
 
+from pyairtable import Api, Base
+from pyairtable.formulas import match
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv(override=True)
+
+BASE_ID = 'appkzoV3T5OcsljQl'
+TABLE_NAME = 'tbl4TdhgfK0Qt5k6f'
+ACCESS_TOKEN = os.environ.get('AIRTABLE_TOKEN')
+
+api = Api(ACCESS_TOKEN)
+base = Base(api, BASE_ID)
+table = base.table(TABLE_NAME)
+
 mod = Blueprint('auth', __name__, url_prefix='/auth')
 
 @mod.route('/logout', methods=['POST'])
