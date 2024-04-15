@@ -9,6 +9,7 @@ export default function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profile, setProfile] = useState("");
+  const [profilePic, setProfilePic] = useState(""); // New state for profile picture
 
   useEffect(() => {
     const verifySession = async () => {
@@ -16,8 +17,8 @@ export default function AuthProvider({ children }) {
         const response = await axios.get('auth/session-status', { withCredentials: true });
         if (response.data.status === "active") {
           setIsLoggedIn(true);
-          console.log(response.data.userEmail);
           setProfile(response.data.userEmail);
+          setProfilePic(response.data.userPicture); // Assuming userPicture is part of session status response
         }
       } catch (error) {
         console.error("Error:", error);
@@ -34,7 +35,8 @@ export default function AuthProvider({ children }) {
       const response = await axios.post('auth/verify-google-token', { token: token });
       if (response.data.success && response.data.emailValid) {
         setIsLoggedIn(true);
-        setProfile(response.data.userEmail); // Make sure to adjust this line if the backend response structure is different
+        setProfile(response.data.userEmail);
+        setProfilePic(response.data.userPicture); // Update profile picture
       } else {
         setIsLoggedIn(false);
       }
@@ -45,12 +47,13 @@ export default function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    await axios.post('auth/logout', {}, { withCredentials: true });
+    await axios.post('/auth/logout', {}, { withCredentials: true });
     setIsLoggedIn(false);
+    setProfilePic(""); // Clear profile picture
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isLoading, profile, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, isLoading, profile, profilePic, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

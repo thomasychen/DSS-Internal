@@ -41,17 +41,6 @@ export default function HomeDirectory() {
 
   return (
     <div>
-      {/* <AppBar position="static" style={{ backgroundColor: "#8CD6D1" }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="logo">
-            <img src={DSSLogo} alt="DSS Logo" height="50" />
-          </IconButton>
-          <div style={{ flexGrow: 1 }}></div>
-          <Button color="inherit" onClick={logout}>
-            Logout <LogoutIcon />
-          </Button>
-        </Toolbar>
-      </AppBar> */}
       <NavBar logout={logout}/>
       <div
         style={{

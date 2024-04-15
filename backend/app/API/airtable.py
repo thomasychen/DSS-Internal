@@ -5,17 +5,20 @@ import os
 from openai import OpenAI
 import fitz
 import requests
+from dotenv import load_dotenv
 
 
-
+load_dotenv(override=True)
 mod = Blueprint('api', __name__, url_prefix='/api')
 
 BASE_ID = 'appkzoV3T5OcsljQl'
 TABLE_NAME = 'tbl4TdhgfK0Qt5k6f'
 ACCESS_TOKEN = os.environ.get('AIRTABLE_TOKEN')
-OPENAI_KEY = os.environ.get("OPENAI_KEY")
 
-client = OpenAI(api_key=OPENAI_KEY)
+client = OpenAI(
+  api_key=os.environ['OPENAI_KEY'],
+)
+# print(ACCESS_TOKEN)
 
 api = Api(ACCESS_TOKEN)
 base = Base(api, BASE_ID)
@@ -167,17 +170,18 @@ def get_chat_response():
         doc.close()
 
 
-    response = client.chat.completions.create(model="gpt-4",  # or another model version
+    response = client.chat.completions.create(model="gpt-3.5-turbo-0125",  # or another model version
     messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "system", "content": "You are a knowledgeable Data Science Society club historian. You are given a row of data about a member and their club-related info, a question, and the linkedin profile information about the member."},
         {"role": "user", "content": str(person_data)},
-        {"role": "user", "content": chat_input},
-        {"role": "user", "content": linkedin_text}
+        {"role": "user", "content": linkedin_text},
+        {"role": "user", "content": chat_input}
     ])
 
     try:
-        last_message_content = response['choices'][0]['message']['content']
-    except (KeyError, IndexError):
+        last_message_content = response.choices[0].message.content
+        
+    except (AttributeError, KeyError, IndexError):
         last_message_content = "Error processing completion."
 
     # Return this as a JSON response

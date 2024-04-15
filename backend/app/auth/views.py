@@ -21,7 +21,7 @@ def check_session_status():
     try:
         # Attempt to decode the JWT
         payload= jwt.decode(token_cookie, current_app.config.get("SECRET_KEY"), algorithms=["HS256"])
-        return jsonify(status="active", userEmail=payload["email"], userExpiration=payload["exp"]), 200
+        return jsonify(status="active", userEmail=payload["email"], userExpiration=payload["exp"], userPicture=payload['user_photo']), 200
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return jsonify(status="inactive"), 401
 
@@ -33,16 +33,17 @@ def verify_google_token():
     if google_response.ok:
         google_data = google_response.json()
         user_email = google_data['email']
+        user_picture = google_data.get('picture', '')  # Retrieve profile picture URL
         # Check if the email is in your CSV/mailing list
         email_valid = check_email_in_list(user_email)
         if email_valid:
-            custom_token = generate_jwt(user_email)
-            resp = make_response(jsonify(success=True, emailValid=True, userEmail=user_email))
-            resp.set_cookie('auth_token', custom_token, httponly=True, secure=True, path='/') # secure=True ensures it's sent over HTTPS only
+            custom_token = generate_jwt(user_email, user_picture)
+            resp = make_response(jsonify(success=True, emailValid=True, userEmail=user_email, userPicture=user_picture))
+            resp.set_cookie('auth_token', custom_token, httponly=True, secure=True, path='/')
         else:
-            resp = make_response(jsonify(success=True, emailValid=False, userEmail=user_email))
+            resp = make_response(jsonify(success=True, emailValid=False, userEmail=user_email, userPicture=user_picture))
         return resp 
-    return jsonify(success=False, emailValid=False, userEmail="")
+    return jsonify(success=False, emailValid=False, userEmail="", userPicture="")
 
 def check_email_in_list(email):
     # Implement your logic to check against the CSV/mailing list
@@ -50,8 +51,9 @@ def check_email_in_list(email):
     ## use google sheets api to check current dss roster or smt
     return True  # or False, based on your validation
 
-def generate_jwt(user_email):
+def generate_jwt(user_email, user_picture_link):
     payload = {
+        'user_photo':user_picture_link,
         'email': user_email,
         'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # Expires in 1 day
     }

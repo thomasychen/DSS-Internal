@@ -1,7 +1,6 @@
 from flask import Flask
 from app.auth.views import mod as module_one_mod
 from app.API.airtable import mod as module_two_mod
-from dotenv import load_dotenv
 import os
 
 def create_app():
