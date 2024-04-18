@@ -61,9 +61,11 @@ def fetch_person_with_friends_by_id(person_id):
 
         # Extract the IDs of the top 3 friends
         friend_names = [record['fields'].get(f'friend_{i}') for i in range(1, 4)]
+        recommended_friend_names = [record['fields'].get(f'Rec{i}') for i in range(1, 4)]
 
         # Initialize placeholders for the closest friends
         closest_friends = []
+        recommended_friends = []
 
         # Fetch each friend's details from their IDs and append to closest_friends list
         for friend_name in friend_names:
@@ -96,6 +98,35 @@ def fetch_person_with_friends_by_id(person_id):
                     closest_friends.append(friend_details)
                     # Log error or assign placeholder if needed
 
+        for friend_name in recommended_friend_names:
+            if friend_name:  # Exclude the person's own ID
+                try:
+                    formula = match({"Name": friend_name})
+                    matching_record = table.first(formula=formula)
+                    if matching_record:
+                        friend_record = matching_record
+                        friend_details = {
+                            'id': friend_record['id'],
+                            'name': friend_record['fields'].get('Name', 'Unknown'),
+                            'image': friend_record['fields'].get('Images', [{"url": "no image"}])[0]["url"],
+                            'position': friend_record['fields'].get('Current Position', 'No position listed'),
+                            'email': friend_record['fields'].get('Email', 'No email listed')
+                        }
+                        recommended_friends.append(friend_details)
+                        logger.info(f"Fetched friend: {friend_details}")
+                    else:
+                        raise Exception(f"{friend_name} not found in database")
+                except Exception as e:
+                    logger.error(f"Error fetching friend details for ID {friend_name}: {e}")
+                    friend_details = {
+                            'id': "",
+                            'name': str(e),
+                            'image': "",
+                            'position': "",
+                            'email': ""
+                    }
+                    recommended_friends.append(friend_details)
+
         # Construct the person details including the closest friends separately and person's own details
         person = {
             'id': record['id'],
@@ -105,7 +136,8 @@ def fetch_person_with_friends_by_id(person_id):
             'current_position': current_position,
             'image': record['fields'].get('Images', [{"url": "no image"}])[0]["url"],
             'email': record['fields'].get('Email', ''),
-            'closest_friends': closest_friends
+            'closest_friends': closest_friends,
+            'recommended_friends': recommended_friends,
         }
         return person
     except Exception as e:

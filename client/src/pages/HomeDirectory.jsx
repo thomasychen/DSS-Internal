@@ -73,17 +73,55 @@ export default function HomeDirectory() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Define the role order for sorting
+  const roleOrder = [
+    "President",
+    "Internal VP",
+    "External VP",
+    "VP of Marketing",
+    "VP of Sourcing",
+    "Acadev Director",
+    "Director of Social Good",
+    "Director of Consulting",
+    "VP of Culture",
+    "VP of Financing",
+    "VP of Tech",
+    "Social Good PM",
+    "Social Good Analyst",
+    "Consulting PM",
+    "Consultant",
+    "Acadev Mentor",
+    "Senior Advisor"
+  ];
+  
+  // Create a mapping of roles to their order for quick lookup
+  const roleOrderMap = roleOrder.reduce((acc, role, index) => {
+    acc[role] = index;
+    return acc;
+  }, {});
+  
   useEffect(() => {
     const fetchPeople = async () => {
       setIsFetching(true);
       try {
         const response = await axios.get("/api/get-data");
-        // Pre-group people by their section
-        const groupedPeople = response.data.reduce((acc, person) => {
+  
+        // Sort the response data by name alphabetically
+        const sortedPeople = response.data.sort((a, b) => a.name.localeCompare(b.name));
+  
+        // Sort by the role order defined above, utilizing the stable sorting nature of Array.prototype.sort
+        sortedPeople.sort((a, b) => {
+          return roleOrderMap[a.position] - roleOrderMap[b.position];
+        });
+  
+        // Pre-group sorted people by their section
+        const groupedPeople = sortedPeople.reduce((acc, person) => {
           const section = positionMap[person.position] || "Others";
-          acc[section] = [...(acc[section] || []), person];
+          if (!acc[section]) acc[section] = [];
+          acc[section].push(person);
           return acc;
         }, {});
+  
         setPeople(groupedPeople);
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -91,7 +129,7 @@ export default function HomeDirectory() {
         setIsFetching(false);
       }
     };
-
+  
     if (isLoggedIn) {
       fetchPeople();
     }
@@ -168,7 +206,7 @@ export default function HomeDirectory() {
   return (
     <div>
       <NavBar logout={logout} />
-      <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
+      <div style={{ width: "100%", maxWidth: "90%", margin: "0 auto" }}>
         {sectionOrder.map((sectionTitle) => {
           // Check if there are people in the current section
           const peopleInSection = people[sectionTitle];

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { Card, CardMedia, CardContent, Typography, TextField, IconButton, Avatar, CircularProgress } from '@mui/material';
+import { Card, CardMedia, CardContent, Typography, TextField, IconButton, Avatar, CircularProgress, Tab, Tabs} from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import styled from '@emotion/styled';
 import LogoLoading from "../components/Loading";
@@ -31,14 +31,34 @@ const MessageAvatar = styled(Avatar)`
 `;
 
 
+// Styled components
 const Container = styled.div`
   display: flex;
   height: 90vh;
-  flex-direction: row; // Default to row for larger screens
-
+  flex-direction: row;
   @media (max-width: 768px) {
-    flex-direction: column; // Stack vertically on small screens
+    flex-direction: column;
   }
+`;
+
+const ProfileColumn = styled.div`
+  flex-basis: 60%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  @media (max-width: 768px) {
+    flex-basis: 100%;
+    order: -1;
+  }
+`;
+
+const LargeCard = styled(Card)`
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #FAFAF5;
+  display: flex;
+  border-radius: 8px;
 `;
 
 const ChatColumn = styled.div`
@@ -50,19 +70,6 @@ const ChatColumn = styled.div`
 
   @media (max-width: 768px) {
     flex-basis: 100%; // Take full width on small screens
-  }
-`;
-
-const ProfileColumn = styled.div`
-  flex-basis: 60%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-
-  @media (max-width: 768px) {
-    flex-basis: 100%; // Take full width on small screens
-    order: -1; // Make it appear above the chat column
   }
 `;
 
@@ -103,14 +110,6 @@ const InputArea = styled.div`
 //   flex-direction: column;
 //   align-items: left;
 // `;
-
-const LargeCard = styled(Card)`
-  width: 100%;
-  margin-bottom: 20px;
-  background-color: #FAFAF5;
-  display: flex;
-  border-radius: 8px;
-`;
 
 const LargeImage = styled(CardMedia)`
   flex-shrink: 0;
@@ -159,6 +158,7 @@ export default function PersonalPage() {
   const { id } = useParams();
   const { profilePic, logout } = useAuth();
   const [person, setPerson] = useState(null);
+  const [activeTab, setActiveTab] = useState('closest');
 
   useEffect(() => {
     setMessages([]);  // Clear messages on ID change
@@ -201,6 +201,10 @@ export default function PersonalPage() {
       e.preventDefault();
       sendMessage();
     }
+  };
+
+  const handleChangeTab = (event, newValue) => {
+    setActiveTab(newValue);
   };
 
   if (!person) {
@@ -250,17 +254,35 @@ export default function PersonalPage() {
             <Typography variant="body2">{person.current_position}</Typography>
           </LargeDetails>
         </LargeCard>
-        {person.closest_friends.map((friend) => (
-          <Link key={friend.id} to={`/personal/${friend.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-            <SmallCard>
+        <Tabs value={activeTab} onChange={handleChangeTab} aria-label="Friend tabs">
+            <Tab label="Closest Friends" value="closest"/>
+            <Tab label="Recommended Friends" value="recommended"/>
+          </Tabs>
+          {activeTab === 'closest' ? (
+            person.closest_friends.map((friend) => (
+              <Link key={friend.id} to={`/personal/${friend.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                            <SmallCard>
               <SmallImage component="img" image={friend.image} alt={friend.name}/>
               <SmallDetails>
                 <Name variant="h6">{friend.name}</Name>
                 <Position variant="subtitle1">{friend.position}</Position>
               </SmallDetails>
             </SmallCard>
-          </Link>
-        ))}
+              </Link>
+            ))
+          ) : (
+            person.recommended_friends.map((friend) => (
+              <Link key={friend.id} to={`/personal/${friend.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                <SmallCard>
+              <SmallImage component="img" image={friend.image} alt={friend.name}/>
+              <SmallDetails>
+                <Name variant="h6">{friend.name}</Name>
+                <Position variant="subtitle1">{friend.position}</Position>
+              </SmallDetails>
+            </SmallCard>
+              </Link>
+            ))
+          )}
       </ProfileColumn>
     </Container>
     </>
