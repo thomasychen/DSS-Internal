@@ -9,7 +9,8 @@ export default function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profile, setProfile] = useState("");
-  const [profilePic, setProfilePic] = useState(""); // New state for profile picture
+  const [profilePic, setProfilePic] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false); // New state for profile picture
 
   useEffect(() => {
     const verifySession = async () => {
@@ -43,6 +44,8 @@ export default function AuthProvider({ children }) {
     } catch (error) {
       console.error("Login error:", error);
       setIsLoggedIn(false);
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -53,7 +56,7 @@ export default function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, isLoading, profile, profilePic, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, isLoading, profile, profilePic, login, logout, isLoggingIn, setIsLoggingIn }}>
       {children}
     </AuthContext.Provider>
   );

@@ -8,6 +8,7 @@ from pyairtable import Api, Base
 from pyairtable.formulas import match
 import os
 from dotenv import load_dotenv
+from app.API.airtable import fetch_data
 
 
 load_dotenv(override=True)
@@ -62,6 +63,8 @@ def verify_google_token():
     return jsonify(success=False, emailValid=False, userEmail="", userPicture="")
 
 def check_email_in_list(email):
+    if email not in [person["email"] for person in fetch_data()]:
+        return False
     # Implement your logic to check against the CSV/mailing list
     # For example, you could load the CSV and check if the email is in it
     ## use google sheets api to check current dss roster or smt

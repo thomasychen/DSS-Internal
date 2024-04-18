@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.80970bb9.css",
+    "main.js": "/static/js/main.0e830cdd.js",
+    "static/js/453.258b012d.chunk.js": "/static/js/453.258b012d.chunk.js",
+    "static/media/dss_logo.png": "/static/media/dss_logo.31d9e0736432b7716541.png",
+    "index.html": "/index.html",
+    "main.80970bb9.css.map": "/static/css/main.80970bb9.css.map",
+    "main.0e830cdd.js.map": "/static/js/main.0e830cdd.js.map",
+    "453.258b012d.chunk.js.map": "/static/js/453.258b012d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.80970bb9.css",
+    "static/js/main.0e830cdd.js"
+  ]
+}

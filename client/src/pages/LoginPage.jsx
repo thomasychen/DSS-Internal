@@ -5,18 +5,24 @@ import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom'; 
 import dssLogo from '../assets/dss_logo.png';
 import { useAuth } from '../context/AuthContext';
+import LogoLoading from "../components/Loading";
 
 function LoginPage() {
-  const { login } = useAuth();
+  const { login, isLoggingIn, setIsLoggingIn } = useAuth();
   const navigate = useNavigate();
 
   const responseGoogle = (response) => {
+    setIsLoggingIn(true);
     login(response.credential).then(() => {
       navigate("/");
     })
     .catch(error => {
       console.error("Error:", error);
     });
+  }
+
+  if (isLoggingIn) {
+    return <LogoLoading />;
   }
 
   return (
