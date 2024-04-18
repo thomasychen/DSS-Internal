@@ -19,6 +19,8 @@ export default function HomeDirectory() {
   const cardWidth = 345; // width of a single card
   const gap = 16; // gap between cards
   const containerPadding = 10;
+  const sectionOrder = ["Exec", "Acadev", "Consulting", "Social Good", "Senior Advisors", "Other"];
+
 
   const positionMap = {
     "Senior Advisor": "Senior Advisors",
@@ -167,9 +169,16 @@ export default function HomeDirectory() {
     <div>
       <NavBar logout={logout} />
       <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
-        {Object.entries(people).map(([sectionTitle, peopleInSection]) => (
-          <Section key={sectionTitle} title={sectionTitle} people={peopleInSection} />
-        ))}
+        {sectionOrder.map((sectionTitle) => {
+          // Check if there are people in the current section
+          const peopleInSection = people[sectionTitle];
+          return (
+            // Only render the section if there are people in it
+            peopleInSection && (
+              <Section key={sectionTitle} title={sectionTitle} people={peopleInSection} />
+            )
+          );
+        })}
       </div>
     </div>
   );
