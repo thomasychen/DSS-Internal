@@ -1,6 +1,6 @@
 # DSS-Internal
 
-Internal Website for DSSers:
+Internal Website for Members of Data Science Society @ UC Berkeley:
 
 Link to presentations:
 
