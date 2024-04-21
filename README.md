@@ -2,8 +2,10 @@
 
 Internal Website for DSSers:
 
-Link to presentation:
+Link to presentations:
+
 Midterm: https://docs.google.com/presentation/d/1M5T-ayfLaauE-B9l70486H_451_hwqcMfJKTwUGB77E/edit?usp=sharing
+
 Final: https://docs.google.com/presentation/d/1M5T-ayfLaauE-B9l70486H_451_hwqcMfJKTwUGB77E/edit?usp=sharing
 
 Link to website:
