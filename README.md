@@ -1,19 +1,20 @@
 # DSS-Internal
 
-Internal Website for Members of Data Science Society @ UC Berkeley:
+## Internal Website for Members of Data Science Society @ Berkeley:
 
-Link to presentations:
+Link to Presentations:
+- Midterm Deliverable ([Link](https://docs.google.com/presentation/d/1IjBoi-kGEJncKmGKTYgPFywGeW8xR4xQfmGGh53wbQU/edit?usp=sharing))
+- Final Deliverable ([Link](https://docs.google.com/presentation/d/1M5T-ayfLaauE-B9l70486H_451_hwqcMfJKTwUGB77E/edit?usp=sharing))
 
-Midterm: https://docs.google.com/presentation/d/1M5T-ayfLaauE-B9l70486H_451_hwqcMfJKTwUGB77E/edit?usp=sharing
-
-Final: https://docs.google.com/presentation/d/1M5T-ayfLaauE-B9l70486H_451_hwqcMfJKTwUGB77E/edit?usp=sharing
-
-Link to website:
+Link to Website:
 https://floating-tor-01392-a251bb952f37.herokuapp.com/
 
-If you can't sign in (and you are in dss): must fill out airtable registration form to populate your personal information!
+If you can't sign in (and you are in DSS), you must fill out the Airtable registration form to populate your personal information!
 
-How to set up locally after cloning, open the project in vscode and open 2 terminals:
+---
+
+## Developer Set-up
+Open the project in VSCode and open two terminals:
 Frontend terminal:
 
 1. cd to client
