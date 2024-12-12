@@ -1,6 +1,6 @@
 # DSS-Internal
 
-## Internal Website for Members of Data Science Society @ Berkeley:
+## Internal Website for Members of Data Science Society @ Berkeley
 
 Link to Presentations:
 - Midterm Deliverable ([Link](https://docs.google.com/presentation/d/1IjBoi-kGEJncKmGKTYgPFywGeW8xR4xQfmGGh53wbQU/edit?usp=sharing))
